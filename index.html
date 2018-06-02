@@ -3,10 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>2016许愿墙</title>
+<title>星云高考加油墙</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link href="" rel="stylesheet">
+<link href="libs/bootstrap-4.1.0-dist/css/bootstrap.min.css" rel="stylesheet">
 <style type="text/css">
 	html,body{
 		height: 100%;
@@ -44,7 +45,8 @@
 		padding: 0;
 		line-height: 20px;
 		height: 100px;
-		padding: 10px;
+		padding: 20px;
+    	margin-bottom: 0;
 	}
 	/* 	::selection{
 		background:none;字体防止选中
@@ -79,12 +81,8 @@
 		top: 10px;
 	}
 	.input-box{
-		position: fixed;
-		bottom: 50px;
-		width: 60%;
-		display: flex;
-		display: -webkit-flex;
-		left: 20%;
+		top: -5px;
+		display:inline-block
 	}
 	.input-box input{
 		flex: 1;
@@ -105,15 +103,82 @@
 		border-top-right-radius: 5px;
 		border-bottom-right-radius: 5px;
 	}
+	.submit-message {
+		width: 200px;
+		height: 40px;
+		font-size: 20px;
+		line-height: 40px;
+		background-color: crimson;
+		border-radius: 20px;
+		cursor: pointer;
+		color: bisque;
+	}
+	.item-name, .item-school {
+		text-align: right;
+    	margin-right: 20px;
+	}
 </style>
 </head>
 <body>
-   	<div id="contianer"></div>
-   	<div class="input-box">
-   		<input type="text" name="" value="" id="inputvalue" placeholder="说说2016年你想做些什么...">
-   		<a href="javascript:;" class="sendBtn">发送</a>
-   	</div>
-  	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script> 
+   	<div style="padding-top: 140px;">
+		   <div style="position: absolute;
+		   margin-top: -130px;">
+				<div style="position: relative;
+				top: -5px;
+				margin-left: auto;
+				margin-right: auto;
+				display: inline;">
+					<img src="logo.png">
+				</div>
+				<div class="input-box">
+					<!-- <input type="text" name="" value="" id="inputvalue" placeholder="说说2016年你想做些什么...">
+					<a href="javascript:;" class="sendBtn">发送</a> -->
+					<button id="submit-message" class="submit-message" data-toggle="modal" data-target="#exampleModal">写祝福</button>
+				</div>
+		   </div>
+			<div id="contianer"></div>
+			<div style=" position:fixed; bottom:10px; margin:auto;width:100%; height:60px; color:gold">
+					<p style="margin-bottom: 0">使用前请先安装<a href="https://github.com/ChengOrangeJu/WebExtensionWallet"><span>web钱包插件</span></a>或在移动端安装<a href="https://nano.nebulas.io/">nas neno钱包</a></p>
+					<p>same-flower工作小组是一个区块链应用开发兴趣小组，致力于开发出更多更优质的DAPP，欢迎大家提宝贵意见和建议，联系方式：same4869@163.com</p><br>
+			</div>
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				 <div class="modal-dialog" role="document">
+					 <div class="modal-content">
+					 <div class="modal-header">
+						 <h5 class="modal-title" id="exampleModalLabel">为考生写祝福</h5>
+						 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						 <span aria-hidden="true">&times;</span>
+						 </button>
+					 </div>
+					 <div class="modal-body">
+						 <form>
+						 <div class="form-group">
+							 <label for="recipient-name" class="col-form-label">你的昵称:</label>
+							 <input type="text" class="form-control" id="nick-name">
+						 </div>
+						 <div class="form-group">
+							 <label for="message-text" class="col-form-label">你的学校:</label>
+							 <textarea class="form-control" id="school-text"></textarea>
+						 </div>
+						 <div class="form-group">
+								 <label for="message-text" class="col-form-label">祝福语:</label>
+								 <textarea class="form-control" id="content-text"></textarea>
+							 </div>
+						 </form>
+					 </div>
+					 <div class="modal-footer">
+						 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						 <button type="button" class="btn btn-primary" id="submit_contents">Send message</button>
+					 </div>
+					 </div>
+				 </div>
+			 </div>
+	   </div>
+	  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script> 
+	  <script src="libs/bootstrap-4.1.0-dist/js/bootstrap.min.js"></script>
+	  <script type="text/javascript" src="./dist/nebulas.js"></script>
+	  <script type="text/javascript" src="./dist/nebPay.js"></script>
+	  <script type="text/javascript" src="index.js"></script>
     <script type="text/javascript">
 	(function($,window,document,undefined){
 	    $.fn.drag = function() {
@@ -181,35 +246,10 @@
 	var contianer=$("#contianer");
 	contianer.css({
 		"width":winW,
-		"height":winH-100,
+		"height":winH-140,
 		"position":"relative"
 	});
-	var textEle=["2016许愿墙....","月落物体霜满天","学如逆水行舟"]//初始化文本
 	var colorArr=["#BBE1F1","#FFC2EC","#C6CCF7","#FFF9D2",'#F8B3D0', '#FFCC00'];//初始化背景颜色
-	var box=null;
-	function createEle(){
-		for(var i=0;i<textEle.length;i++){
-			AddEle(textEle[i]);//添加节点
-		}
-		$(".sendBtn").on("click",function(){//点击发送按钮
-			var value=$("#inputvalue").val();//获取input里面的value
-			AddEle(value)
-			$("#inputvalue").val("");//清空input里面的value
-		});
-		$("#inputvalue").on("keypress",function(event){
-			if(event.keyCode&&event.keyCode==13){
-				var value=$("#inputvalue").val();
-				AddEle(value);
-				$("#inputvalue").val("");
-			}
-		});
-		function AddEle(value){
-			box=$('<div class="box"><p>'+value+'</p><span class="closeBtn"></span></div>');
-			box.appendTo(contianer);
-			box.drag();
-		}
-	}
-	createEle();
     </script>
 </body>
 </html>
