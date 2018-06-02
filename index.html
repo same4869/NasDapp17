@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>2016许愿墙</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<style type="text/css">
+	html,body{
+		height: 100%;
+		width: 100%;
+		padding: 0;
+		margin: 0;
+	}
+	body{
+		background: -webkit-linear-gradient(top, rgb(203, 235, 219) 0%, rgb(55, 148, 192) 120%);
+		background: -moz-linear-gradient(top, rgb(203, 235, 219) 0%, rgb(55, 148, 192) 120%);
+		font-family: '微软雅黑';
+		font-size: 16px;
+		position: relative;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
+		overflow-x: hidden;
+	}
+	.box{
+		height: 200px;
+		width: 200px;
+		box-shadow: 0 0px 10px rgba(0, 0, 0, 0.4);
+		background: #BBE1F1;
+		-webkit-border-bottom-right-radius:110px 10px;
+		-webkit-border-bottom-left-radius:10px 200px;
+		-webkit-border-top-left-radius:110px 10px;
+		-webkit-border-top-right-radius:10px 200px;
+		position: absolute;
+		cursor: move;
+		box-sizing: border-box;
+
+	}
+	.box p{
+		padding: 0;
+		line-height: 20px;
+		height: 100px;
+		padding: 10px;
+	}
+	/* 	::selection{
+		background:none;字体防止选中
+	} */
+	.box .closeBtn{
+		position: absolute;
+		height: 20px;
+		width: 20px;
+		right: 0px;
+		top: -10px;
+		transform: rotate(45deg);
+		border-radius: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		cursor: pointer;
+	}
+	.box .closeBtn::after{
+		content: "";
+		height: 20px;
+		width: 1px;
+		background: #fff;
+		position: absolute;
+		left: 10px;
+		top: 0;
+	}
+	.box .closeBtn::before{
+		content: "";
+		height: 1px;
+		width: 20px;
+		background: #fff;
+		position: absolute;
+		left: 0px;
+		top: 10px;
+	}
+	.input-box{
+		position: fixed;
+		bottom: 50px;
+		width: 60%;
+		display: flex;
+		display: -webkit-flex;
+		left: 20%;
+	}
+	.input-box input{
+		flex: 1;
+		-webkit-flex: 1;
+		padding-left: 10px;
+		outline: none;
+		border: 1px solid #5449F9;
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+		font-size: 16px;
+	}
+	.input-box a.sendBtn{
+		padding: 10px 20px;
+		display: block;
+		text-decoration: none;
+		background: #5449F9;
+		color: white;
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+	}
+</style>
+</head>
+<body>
+   	<div id="contianer"></div>
+   	<div class="input-box">
+   		<input type="text" name="" value="" id="inputvalue" placeholder="说说2016年你想做些什么...">
+   		<a href="javascript:;" class="sendBtn">发送</a>
+   	</div>
+  	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script> 
+    <script type="text/javascript">
+	(function($,window,document,undefined){
+	    $.fn.drag = function() {
+	    	var parent=this.parent();
+    		this.css({
+				"background":colorArr[parseInt(Math.random() * 6)],//随机颜色
+				"left":parseInt((parent.width()-200)*Math.random()),//随机定位left
+				"top":parseInt((parent.height()-200)*Math.random())//随机定位top
+			});
+			var _this=this;
+			$(".closeBtn",_this).on("click",function(){
+				_this.remove();
+			})
+	        this.on('mousedown', function(e) {
+	            var e = e || window.e,
+	                ex = e.clientX - parseInt($(this).css('left')),
+	                ey = e.clientY - parseInt($(this).css('top')),
+	                $this = $(this);
+	                stopDefault(e);//阻止浏览器的默认行为【防止字体被选中】
+	            $(document).on('mousemove', function(e) {
+	                var e = e || window.e,
+	                    left = e.clientX - ex,
+	                    top = e.clientY - ey;
+	                if (left < 0) {
+	                    left = 0;
+	                } else if (left > winW - $this.width()) {
+	                    left = winW - $this.width();
+	                    console.log(left)
+	                }
+	                if (top < 0) {
+	                    top = 0
+	                } else if (top > $(document).height() - $this.height()-150) {
+	                    top = $(document).height() - $this.height()-150
+	                }
+	                $this.css({
+	                    'left': left + 'px',
+	                    'top': top + 'px',
+	                    "z-index":"1"
+	                }).siblings().css({
+	                	"z-index":"0"
+	                })
+	                stopDefault(e);//阻止浏览器的默认行为【防止字体被选中】
+	                return false;//阻止浏览器的默认行为【防止字体被选中】
+	            });
+	            $(document).on('mouseup', function(event) {
+	            	 event.stopPropagation(); 
+	                $(document).unbind('mousemove');
+	                $(document).unbind('mouseup');
+	            });
+	        })
+	        function stopDefault(e){
+	        	if ( e && e.stopPropagation ){
+	        		//阻止默认浏览器动作(W3C) 
+	        		e.preventDefault();
+	        	}else{
+	        		//IE中阻止函数器默认动作的方式  
+		        	window.event.returnValue = false; 
+					return false;
+	        	}
+	        }
+		}
+	})(jQuery,window,document)
+	var winW=$(document).width();
+	var winH=$(document).height();
+	var contianer=$("#contianer");
+	contianer.css({
+		"width":winW,
+		"height":winH-100,
+		"position":"relative"
+	});
+	var textEle=["2016许愿墙....","月落物体霜满天","学如逆水行舟"]//初始化文本
+	var colorArr=["#BBE1F1","#FFC2EC","#C6CCF7","#FFF9D2",'#F8B3D0', '#FFCC00'];//初始化背景颜色
+	var box=null;
+	function createEle(){
+		for(var i=0;i<textEle.length;i++){
+			AddEle(textEle[i]);//添加节点
+		}
+		$(".sendBtn").on("click",function(){//点击发送按钮
+			var value=$("#inputvalue").val();//获取input里面的value
+			AddEle(value)
+			$("#inputvalue").val("");//清空input里面的value
+		});
+		$("#inputvalue").on("keypress",function(event){
+			if(event.keyCode&&event.keyCode==13){
+				var value=$("#inputvalue").val();
+				AddEle(value);
+				$("#inputvalue").val("");
+			}
+		});
+		function AddEle(value){
+			box=$('<div class="box"><p>'+value+'</p><span class="closeBtn"></span></div>');
+			box.appendTo(contianer);
+			box.drag();
+		}
+	}
+	createEle();
+    </script>
+</body>
+</html>
